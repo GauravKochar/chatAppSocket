@@ -1,0 +1,100 @@
+<html>
+<head>
+    <title>
+Demo App
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="./socket.io/socket.io.js"></script>
+   
+</head>
+<body>
+    <h1>
+       Login Page
+    </h1>
+    <label>Username:</label>
+    <input type="text" name="username" id="username"><br>
+    <input type="button" id="save" value="Save">
+
+
+
+
+                <div class="container-fluid">
+                    <h1>Live Chat Application</h1>
+            <div class="row">
+                <div class="col-sm-6 col-sm-push-3" id="mainFrame" style="background-color:yellow;">
+                        
+                </div>
+                
+                
+                
+            </div>
+            <div  id="feedback">
+                        
+             </div>
+            <h2>Enter Your Message Here :-</h2>
+            <textarea rows="3" cols="40" id="msgbox"></textarea>  
+            </div>
+</body> 
+<script> 
+        var socket = io.connect('http://localhost:9000');
+        var username;
+        var feedback =document.getElementById('feedback');
+     
+    document.getElementById('save').addEventListener('click',function(event){
+     
+        var username =document.getElementById('username').value;
+        socket.emit('new user',username);
+       
+        
+    });
+
+     socket.on('get user',(data) => {
+            
+            console.log("data is ",data);
+                     username = data;
+                       $('#mainFrame').append(data+" is online ");
+           
+                   });
+           
+                   $('#msgbox').keyup(function(event) {
+                       if(event.keyCode==13) {
+                           console.log("event happening",username,$('#msgbox').val());
+                           
+           
+                           socket.emit('msg',username, $('#msgbox').val())
+                           $('#msgbox').val('');
+                       }
+                   });
+
+
+                   $('#msgbox').keypress(function(event) {
+                   socket.emit('typing',username);
+                   });
+
+                   socket.on('rmsg',function(data) {
+                    feedback.innerHTML="";
+                       var html;
+                       if(username === data.name) {
+                            html= '<div>'+
+                       '<p> <strong>'+ data.name+':</strong>'+data.msg+'</p> </div>'
+                       } else {
+                            html= '<div>'+
+                       '<p> <strong>'+ data.name+':</strong>'+data.msg+'</p> </div>'
+                       }
+                  
+                       $('#mainFrame').append(html);
+                      
+                   });
+
+                   socket.on('showTypingMsg', function(data) {
+                    feedback.innerHTML='<p><em>'+data+' is typing a message...</em></p>'
+
+                   })
+                
+        </script>
+
+    </html>

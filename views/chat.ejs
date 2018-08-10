@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>chat App</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="./socket.io/socket.io.js"></script>
+</head>
+<body>
+    
+<div class="container-fluid">
+        <h1>Live Chat Application</h1>
+  <div class="row">
+    <div class="col-sm-6 col-sm-push-3" id="mainFrame" style="background-color:yellow;">
+    </div>
+    
+  </div>
+  <h2>Enter Your Message Here :-</h2>
+  <textarea rows="3" cols="40" id="msgbox"></textarea>  
+</div>
+
+</body>
+<script> 
+        var socket = io();  
+        </script>
+</html>
